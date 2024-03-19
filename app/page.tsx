@@ -1,113 +1,220 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useEffect, useRef } from 'react';
+import Swiper from 'swiper';
+import { EffectCube } from 'swiper/modules';
+
+import Post from '@/components/Post';
+import StoriesSlider from '@/components/story-slider/StoriesSlider';
+import Stories from '@/components/story-slider/Stories';
+import Story from '@/components/story-slider/Story';
+
+import mark from '../components/story-slider/assets/avatars/mark.jpg';
+import malenia from '../components/story-slider/assets/avatars/malenia.jpg';
+import john from '../components/story-slider/assets/avatars/john.jpg';
+
+import f1 from '../components/story-slider/assets/images/food-1.jpg';
+import f2 from '../components/story-slider/assets/images/food-2.jpg';
+import f3 from '../components/story-slider/assets/images/food-3.jpg';
+import f4 from '../components/story-slider/assets/images/food-4.jpg';
+
+import e1 from '../components/story-slider/assets/images/elden-1.jpg';
+import e2 from '../components/story-slider/assets/images/elden-2.jpg';
+import e3 from '../components/story-slider/assets/images/elden-3.jpg';
+
+import v1 from '../components/story-slider/assets/images/vacation-1.jpg';
+import v2 from '../components/story-slider/assets/images/vacation-2.jpg';
+import v3 from '../components/story-slider/assets/images/vacation-3.jpg';
+import v4 from '../components/story-slider/assets/images/vacation-4.jpg';
+import v5 from '../components/story-slider/assets/images/vacation-5.jpg';
+
+import logo from '../components/story-slider/assets/images/logo.png';
+
+import Image from 'next/image';
+
+
+
+
+
+
+export default function page() {
+  const storiesSliderRef = useRef<any>(null);
+
+  const openUserStories = (userIndex: number): void => {
+    const storiesSlider = storiesSliderRef.current;
+    storiesSlider.el.classList.add('stories-slider-in');
+    storiesSlider.enable();
+    storiesSlider.slideTo(userIndex, 0);
+  };
+
+  const onCloseButtonClick = (): void => {
+    const storiesSlider = storiesSliderRef.current;
+    storiesSlider.disable();
+    storiesSlider.el.classList.add('stories-slider-out');
+  };
+
+  useEffect(() => {
+    const storiesSlider = storiesSliderRef.current;
+    if (storiesSlider) {
+      storiesSlider.el.addEventListener('animationend', () => {
+        if (storiesSlider.el.classList.contains('stories-slider-out')) {
+          storiesSlider.el.classList.remove('stories-slider-in');
+          storiesSlider.el.classList.remove('stories-slider-out');
+        }
+      });
+    }
+  }, [storiesSliderRef]);
+
+  const storiesData = [
+    {
+      user: {
+        avatar: mark,
+        name: 'mark_johnson',
+      },
+      stories: [
+        {
+          date: '21h',
+          image: f1,
+        },
+        {
+          date: '12h',
+          image: f2,
+        },
+        {
+          date: '2h',
+          video: 'video.mp4',
+        },
+        {
+          date: '30m',
+          image: f3,
+        },
+        {
+          date: '15m',
+          image: f4,
+        },
+      ],
+    },
+    {
+      user: {
+        avatar: malenia,
+        name: 'malenia',
+      },
+      stories: [
+        {
+          date: '5h',
+          image: e1,
+        },
+        {
+          date: '45m',
+          image: e2,
+        },
+        {
+          date: '5m',
+          image: e3,
+        },
+      ],
+    },
+    {
+      user: {
+        avatar: john,
+        name: 'john1986',
+      },
+      stories: [
+        {
+          date: '15h',
+          image: v1,
+        },
+        {
+          date: '10h',
+          image: v2,
+        },
+        {
+          date: '10h',
+          image: v3,
+        },
+        {
+          date: '8h',
+          image: v4,
+        },
+        {
+          date: '47m',
+          image: v5,
+        },
+      ],
+    },
+  ];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className=''>
+      <div className="demo-app">
+        <div className="demo-title">
+          <Image src={logo} width={156} height={156} alt="logo" />
         </div>
+        <div className="demo-stories">
+          {storiesData.map((userStories, userStoriesIndex) => (
+            <a
+              key={userStoriesIndex}
+              href="#"
+              onClick={() => openUserStories(userStoriesIndex)}
+            >
+              <span className="demo-stories-avatar">
+                <Image src={userStories.user.avatar} alt="" width={423} height={768} />
+              </span>
+              <span className="demo-stories-name">{userStories.user.name}</span>
+            </a>
+          ))}
+        </div>
+        {storiesData.map((userStories, userStoriesIndex) => (
+          <Post
+            key={userStoriesIndex}
+            name={userStories.user.name}
+            avatar={userStories.user.avatar}
+            likesCount="133"
+            image={userStories.stories[0].image}
+            text="The steak turned out great 😊🥩"
+            date="3 hours ago"
+            onAvatarClick={() => openUserStories(userStoriesIndex)}
+          />
+        ))}
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <StoriesSlider
+        Swiper={Swiper}
+        EffectCube={EffectCube}
+        enabled={false}
+        autoplayDuration={5000}
+        onSlidesIndexesChange={(mainIndex: any, subIndex: any) =>
+          console.log({ mainIndex, subIndex })
+        }
+        onStoriesSlider={(instance: any) => {
+          storiesSliderRef.current = instance;
+        }}
+        onEnd={() => {
+          storiesSliderRef.current.disable();
+          storiesSliderRef.current.el.classList.add('stories-slider-out');
+        }}
+      >
+        {storiesData.map((userStories, userStoriesIndex) => (
+          <Stories key={userStoriesIndex}>
+            {userStories.stories.map((story, storyIndex) => (
+              <Story
+                key={storyIndex}
+                userLink="#"
+                avatar={<Image src={userStories.user.avatar} alt="avatar" width={50} height={50} />}
+                name={userStories.user.name}
+                date={story.date}
+                closeButton
+                onCloseButtonClick={onCloseButtonClick}
+              >
+                {story.video ? (
+                  <video src={story.video} playsInline preload="metadata" />
+                ) : (
+                  <Image src={story.image as any} alt="story" />
+                )}
+              </Story>
+            ))}
+          </Stories>
+        ))}
+      </StoriesSlider>
     </main>
   );
 }
